@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0j0pd3b3xio0"]
+
+[ext_resource type="PackedScene" uid="uid://l710gty7ic36" path="res://Characters/MainCharacter/MainCharacter.tscn" id="1_0b8pj"]
+[ext_resource type="Texture2D" uid="uid://hiyskiyt015s" path="res://Levels/Level_1_Ground.png" id="1_016wm"]
+[ext_resource type="PackedScene" uid="uid://cgoye6mdexoyt" path="res://Characters/Enemy/Enemy.tscn" id="3_a7awh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gwv23"]
+size = Vector2(1120, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7h3j8"]
+size = Vector2(10, 1120)
+
+[node name="Level_1" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(5, 5)
+texture = ExtResource("1_016wm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D"]
+position = Vector2(0, 370)
+scale = Vector2(0.333333, 0.333333)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D"]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_gwv23")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Sprite2D"]
+position = Vector2(0, 370)
+scale = Vector2(0.333333, 0.333333)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D4"]
+position = Vector2(0, -2220)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_gwv23")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Sprite2D"]
+position = Vector2(370, 1.33333)
+scale = Vector2(0.666667, 0.666667)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D2"]
+shape = SubResource("RectangleShape2D_7h3j8")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Sprite2D"]
+position = Vector2(370, 1.33333)
+scale = Vector2(0.666667, 0.666667)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D3"]
+position = Vector2(-1110, -4.5)
+shape = SubResource("RectangleShape2D_7h3j8")
+
+[node name="MainCharacter" parent="." instance=ExtResource("1_0b8pj")]
+position = Vector2(-10, -5)
+
+[node name="Camera2D" type="Camera2D" parent="MainCharacter"]
+
+[node name="Enemy" parent="." instance=ExtResource("3_a7awh")]
+position = Vector2(404, -681)
+
+[node name="Enemy2" parent="." instance=ExtResource("3_a7awh")]
+position = Vector2(697, -436)

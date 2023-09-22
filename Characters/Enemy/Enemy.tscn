@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgoye6mdexoyt"]
+
+[ext_resource type="Script" path="res://Characters/Enemy/Enemy.cs" id="1_j2rkc"]
+[ext_resource type="Texture2D" uid="uid://omn04a5b2p7b" path="res://Characters/Enemy/Yoda.png" id="1_ke2bu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xemuw"]
+radius = 50.0
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_j2rkc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xemuw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_ke2bu")
