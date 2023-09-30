@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bn0q8el0qa00k"]
+
+[ext_resource type="Script" path="res://Weapons/LaserSword/LaserSword.cs" id="1_8ynej"]
+[ext_resource type="Texture2D" uid="uid://cc6ln337rv30e" path="res://Weapons/LaserSword/LaserSword.png" id="1_y6gev"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i3vqn"]
+radius = 240.133
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_8ynej")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_i3vqn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_y6gev")

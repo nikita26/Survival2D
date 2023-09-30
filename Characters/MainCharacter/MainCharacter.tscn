@@ -3,18 +3,19 @@
 [ext_resource type="Texture2D" uid="uid://b6qn4njw10wrk" path="res://Characters/MainCharacter/Dart.png" id="1_baaem"]
 [ext_resource type="Script" path="res://Characters/MainCharacter/MainCharacter.cs" id="1_vonjo"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ohree"]
-radius = 50.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x62gb"]
+radius = 178.0
+height = 576.0
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
+position = Vector2(500, 300)
 script = ExtResource("1_vonjo")
-metadata/MoveSpeed = 500.0
+metadata/MoveSpeed = 3000.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(3, 9)
-shape = SubResource("CircleShape2D_ohree")
+shape = SubResource("CapsuleShape2D_x62gb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(20, 0)
-scale = Vector2(0.2, 0.2)
+position = Vector2(100, -30)
 texture = ExtResource("1_baaem")

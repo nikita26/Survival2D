@@ -1,21 +1,24 @@
-using Game1.Characters;
 using Godot;
+using Survival2D.Abstractions;
 
-public partial class MainCharacter : Godot.CharacterBody2D, ICharacter
+public partial class MainCharacter : CharacterBody2D, ICharacterPlayer
 {
 	private Vector2 _moveVector;
+
 	private float _moveSpeed;
 
 	public MainCharacter()
 	{
 		_HP = 100;
+		Weapon = new LaserSwordWeapon { Damage = 30 };
 	}
 
-	private int _HP;
-	public int HP { get => _HP; }
+	private float _HP;
+	public float HP { get => _HP; }
 
 	public override void _Ready()
 	{
+
 		_moveSpeed = (float)GetMeta("MoveSpeed");
 	}
 
@@ -27,16 +30,10 @@ public partial class MainCharacter : Godot.CharacterBody2D, ICharacter
 		{
 			var collision = GetSlideCollision(i);
 			var node = ((Node)collision.GetCollider());
-			if(node is ICharacter)
+			if(node is ICharacter character)
 			{
-				var character = (ICharacter)node;
 				character.GiveDamage(10);
 			}
-			var type = node.GetClass();
-			var script = node.GetScript();
-			GD.Print(node.Name);
-			GD.Print(node.NativeInstance);
-			GD.Print(type);
 		}
 		//var collision = MoveAndCollide(_moveVector);
 		//if(collision != null)
@@ -77,6 +74,10 @@ public partial class MainCharacter : Godot.CharacterBody2D, ICharacter
 					//_moveVector.X = _moveSpeed;
 					Velocity = new Vector2(_moveSpeed, Velocity.Y);
 				}
+				if(key.Keycode == Key.Space)
+				{
+					Shot(new Vector2(1,0));;
+				}
 			}
 			else
 			{
@@ -102,12 +103,29 @@ public partial class MainCharacter : Godot.CharacterBody2D, ICharacter
 				}
 			}
 		}
+		if(@event is InputEventScreenTouch touch)
+		{
+			var centerWindow = GetTree().Root.Size / 2;
+			var pointAttack = touch.Position - centerWindow;
+			Shot(pointAttack);
+		}
 		base._Input(@event);
 	}
 
+	public IWeapon Weapon { get; }
 
-	public void GiveDamage(int damage)
+	public void GiveDamage(float damage)
 	{
 		_HP -= damage;
+	}
+
+	public void Death()
+	{
+
+	}
+
+	public void Shot(Vector2 direction)
+	{
+		Weapon.Attack(Position, direction, GetTree().Root);
 	}
 }

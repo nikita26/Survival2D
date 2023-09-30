@@ -1,17 +1,59 @@
-[gd_scene load_steps=4 format=3 uid="uid://cgoye6mdexoyt"]
+[gd_scene load_steps=11 format=3 uid="uid://cgoye6mdexoyt"]
 
 [ext_resource type="Script" path="res://Characters/Enemy/Enemy.cs" id="1_j2rkc"]
 [ext_resource type="Texture2D" uid="uid://omn04a5b2p7b" path="res://Characters/Enemy/Yoda.png" id="1_ke2bu"]
+[ext_resource type="Texture2D" uid="uid://xa51ggp8nvi4" path="res://Characters/Enemy/Animation/YodaDeathAnimation1.png" id="3_mxtog"]
+[ext_resource type="Texture2D" uid="uid://orghvcdxd7f3" path="res://Characters/Enemy/Animation/YodaDeathAnimation2.png" id="4_38bkk"]
+[ext_resource type="Texture2D" uid="uid://dqiwm7nopsonf" path="res://Characters/Enemy/Animation/YodaDeathAnimation3.png" id="5_u5n0s"]
+[ext_resource type="Texture2D" uid="uid://r3hfum4ryvrl" path="res://Characters/Enemy/Animation/YodaDeathAnimation4.png" id="6_07d3e"]
+[ext_resource type="Texture2D" uid="uid://dbxinu8bl1vl4" path="res://Characters/Enemy/Animation/YodaDeathAnimation5.png" id="7_m8uxr"]
+[ext_resource type="Texture2D" uid="uid://c8e38hpqv8b3u" path="res://Characters/Enemy/Animation/YodaDeathAnimation6.png" id="8_dppnp"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xemuw"]
-radius = 50.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f58j2"]
+radius = 97.0
+height = 322.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cjhbd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_mxtog")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_38bkk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_u5n0s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_07d3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_m8uxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_dppnp")
+}],
+"loop": false,
+"name": &"death",
+"speed": 5.0
+}]
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_j2rkc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_xemuw")
+shape = SubResource("CapsuleShape2D_f58j2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.15, 0.15)
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("1_ke2bu")
+
+[node name="YodaAnimation" type="AnimatedSprite2D" parent="."]
+visible = false
+scale = Vector2(0.4, 0.4)
+sprite_frames = SubResource("SpriteFrames_cjhbd")
+animation = &"death"
+frame = 5
+frame_progress = 1.0
+speed_scale = 3.0

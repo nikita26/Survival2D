@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0j0pd3b3xio0"]
+[gd_scene load_steps=8 format=3 uid="uid://d0j0pd3b3xio0"]
 
 [ext_resource type="PackedScene" uid="uid://l710gty7ic36" path="res://Characters/MainCharacter/MainCharacter.tscn" id="1_0b8pj"]
+[ext_resource type="Script" path="res://Levels/Level_1.cs" id="1_3q2ns"]
 [ext_resource type="Texture2D" uid="uid://hiyskiyt015s" path="res://Levels/Level_1_Ground.png" id="1_016wm"]
 [ext_resource type="PackedScene" uid="uid://cgoye6mdexoyt" path="res://Characters/Enemy/Enemy.tscn" id="3_a7awh"]
+[ext_resource type="PackedScene" uid="uid://bp7owujgiei5g" path="res://Spawns/EnemySpawn/EnemySpawn.tscn" id="6_o85th"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gwv23"]
 size = Vector2(1120, 10)
@@ -11,9 +13,11 @@ size = Vector2(1120, 10)
 size = Vector2(10, 1120)
 
 [node name="Level_1" type="Node2D"]
+position = Vector2(0, 4)
+script = ExtResource("1_3q2ns")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(5, 5)
+scale = Vector2(10, 10)
 texture = ExtResource("1_016wm")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D"]
@@ -52,9 +56,13 @@ shape = SubResource("RectangleShape2D_7h3j8")
 position = Vector2(-10, -5)
 
 [node name="Camera2D" type="Camera2D" parent="MainCharacter"]
+zoom = Vector2(0.2, 0.2)
 
 [node name="Enemy" parent="." instance=ExtResource("3_a7awh")]
 position = Vector2(404, -681)
 
 [node name="Enemy2" parent="." instance=ExtResource("3_a7awh")]
 position = Vector2(697, -436)
+
+[node name="EnemySpawn" parent="." instance=ExtResource("6_o85th")]
+position = Vector2(-3179, -3212)
