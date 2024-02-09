@@ -19,3 +19,12 @@ shape = SubResource("CapsuleShape2D_x62gb")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(100, -30)
 texture = ExtResource("1_baaem")
+
+[node name="HPBar" type="ProgressBar" parent="."]
+modulate = Color(1, 0.0901961, 0.0588235, 1)
+offset_left = -292.0
+offset_top = 324.0
+offset_right = 308.0
+offset_bottom = 404.0
+value = 100.0
+show_percentage = false

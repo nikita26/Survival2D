@@ -1,131 +1,162 @@
 using Godot;
 using Survival2D.Abstractions;
+using Survival2D.Weapons.LaserSword;
+using Timer = Godot.Timer;
 
-public partial class MainCharacter : CharacterBody2D, ICharacterPlayer
+namespace Survival2D.Characters.MainCharacter
 {
-	private Vector2 _moveVector;
-
-	private float _moveSpeed;
-
-	public MainCharacter()
+	public partial class MainCharacter : CharacterBody2D, ICharacterPlayer
 	{
-		_HP = 100;
-		Weapon = new LaserSwordWeapon { Damage = 30 };
-	}
+		private Vector2 _moveVector;
+		private float _moveSpeed;
+		private float _HP;
 
-	private float _HP;
-	public float HP { get => _HP; }
-
-	public override void _Ready()
-	{
-
-		_moveSpeed = (float)GetMeta("MoveSpeed");
-	}
-
-	public override void _PhysicsProcess(double delta)
-	{
-		MoveAndSlide();
-		
-		for (int i = 0; i < GetSlideCollisionCount(); i++)
+		private RichTextLabel _damageTextLabel;
+		private ProgressBar _HPBar;
+		public MainCharacter()
 		{
-			var collision = GetSlideCollision(i);
-			var node = ((Node)collision.GetCollider());
-			if(node is ICharacter character)
+			_HP = 100;
+			Weapon = new LaserSwordWeapon { Damage = 100 };
+		}
+
+		public float HP
+		{
+			get => _HP;
+			private set
 			{
-				character.GiveDamage(10);
+				_HP = value;
+				_HPBar.Value = value;
 			}
 		}
-		//var collision = MoveAndCollide(_moveVector);
-		//if(collision != null)
-		//{
-		//	GD.Print(collision.GetClass());
-		//	GD.Print(collision.GetNormal().ToString());
-		//	GD.Print(collision.GetInstanceId());
-		//	GD.Print("");
-		//	var position = collision.GetPosition();
-		//}
-	}
 
-	public override void _Input(InputEvent @event)
-	{
-		if (@event is InputEventKey key)
+        public IWeapon Weapon { get; }
+
+        public override void _Ready()
 		{
-			if (key.IsPressed())
+			_moveSpeed = (float)GetMeta("MoveSpeed");
+			_HPBar = GetNode<ProgressBar>("HPBar");
+		}
+
+		public override void _PhysicsProcess(double delta)
+		{
+			MoveAndSlide();
+		}
+
+		public override void _Input(InputEvent @event)
+		{
+			if (@event is InputEventKey key)
 			{
-				if (key.Keycode == Key.W)
+				if (key.IsPressed())
 				{
-					//_moveVector.Y = -_moveSpeed;
-					Velocity = new Vector2(Velocity.X, -_moveSpeed);
-				}
-				if (key.Keycode == Key.S)
-				{
-					//_moveVector.Y = _moveSpeed;
-					Velocity = new Vector2(Velocity.X, _moveSpeed);
+					if (key.Keycode == Key.W)
+					{
+						//_moveVector.Y = -_moveSpeed;
+						Velocity = new Vector2(Velocity.X, -_moveSpeed);
+					}
+					if (key.Keycode == Key.S)
+					{
+						//_moveVector.Y = _moveSpeed;
+						Velocity = new Vector2(Velocity.X, _moveSpeed);
 
-				}
-				if (key.Keycode == Key.A)
-				{
-					//_moveVector.X = -_moveSpeed;
-					Velocity = new Vector2(-_moveSpeed, Velocity.Y);
+					}
+					if (key.Keycode == Key.A)
+					{
+						//_moveVector.X = -_moveSpeed;
+						Velocity = new Vector2(-_moveSpeed, Velocity.Y);
 
+					}
+					if (key.Keycode == Key.D)
+					{
+						//_moveVector.X = _moveSpeed;
+						Velocity = new Vector2(_moveSpeed, Velocity.Y);
+					}
+					if (key.Keycode == Key.Space)
+					{
+						Shot(new Vector2(1, 0)); ;
+					}
 				}
-				if (key.Keycode == Key.D)
+				else
 				{
-					//_moveVector.X = _moveSpeed;
-					Velocity = new Vector2(_moveSpeed, Velocity.Y);
-				}
-				if(key.Keycode == Key.Space)
-				{
-					Shot(new Vector2(1,0));;
+					if (key.Keycode == Key.W)
+					{
+						//_moveVector.Y = 0;
+						Velocity = new Vector2(Velocity.X, 0);
+					}
+					if (key.Keycode == Key.S)
+					{
+						//_moveVector.Y = 0;
+						Velocity = new Vector2(Velocity.X, 0);
+					}
+					if (key.Keycode == Key.A)
+					{
+						//_moveVector.X = 0;
+						Velocity = new Vector2(0, Velocity.Y);
+					}
+					if (key.Keycode == Key.D)
+					{
+						//_moveVector.X = 0;
+						Velocity = new Vector2(0, Velocity.Y);
+					}
 				}
 			}
-			else
+			if (@event is InputEventScreenTouch touch)
 			{
-				if (key.Keycode == Key.W)
+				var centerWindow = GetTree().Root.Size / 2;
+				var pointAttack = touch.Position - centerWindow;
+				Shot(pointAttack);
+			}
+			base._Input(@event);
+		}
+
+
+		public void GiveDamage(float damage)
+		{
+			if (HP > 0)
+			{
+				ShowDamagelabel(damage);
+				HP -= damage;
+				if (HP <= 0)
 				{
-					//_moveVector.Y = 0;
-					Velocity = new Vector2(Velocity.X, 0);
-				}
-				if (key.Keycode == Key.S)
-				{
-					//_moveVector.Y = 0;
-					Velocity = new Vector2(Velocity.X, 0);
-				}
-				if (key.Keycode == Key.A)
-				{
-					//_moveVector.X = 0;
-					Velocity = new Vector2(0, Velocity.Y);
-				}
-				if (key.Keycode == Key.D)
-				{
-					//_moveVector.X = 0;
-					Velocity = new Vector2(0, Velocity.Y);
+					Death();
 				}
 			}
 		}
-		if(@event is InputEventScreenTouch touch)
+
+		public void Death()
 		{
-			var centerWindow = GetTree().Root.Size / 2;
-			var pointAttack = touch.Position - centerWindow;
-			Shot(pointAttack);
+			QueueFree();
+
+			var level = GetTree().Root.GetChild<ILevel>(0);
+			level.StopGame();
 		}
-		base._Input(@event);
-	}
 
-	public IWeapon Weapon { get; }
+		public void Shot(Vector2 direction)
+		{
+			Weapon.Attack(Position, direction, GetTree().Root);
+		}
 
-	public void GiveDamage(float damage)
-	{
-		_HP -= damage;
-	}
+		private void ShowDamagelabel(float damage)
+		{
 
-	public void Death()
-	{
+			if (_damageTextLabel is null)
+			{
+				_damageTextLabel = new RichTextLabel
+				{
+					Scale = new Vector2(7, 7),
+					Size = new Vector2(100, 50),
+					Position = new Vector2(-70, -330),
+					ZIndex = 1,
+					Visible = false
+				};
+				AddChild(_damageTextLabel);
+			}
 
-	}
+			_damageTextLabel.Text = $"-{(int)damage}";
+			_damageTextLabel.Visible = true;
 
-	public void Shot(Vector2 direction)
-	{
-		Weapon.Attack(Position, direction, GetTree().Root);
+			var timer = new Timer() { Autostart = true, WaitTime = 0.3 };
+			timer.Timeout += () => { _damageTextLabel.Visible = false; timer.QueueFree(); };
+			AddChild(timer);
+		}
 	}
 }

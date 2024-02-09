@@ -1,16 +1,16 @@
 using Godot;
 using Survival2D.Abstractions;
-using System;
-using System.Threading.Tasks;
 
 namespace Survival2D.Weapons.LaserSword
 {
 	public partial class LaserSword : Area2D , IProjectile
 	{
+		private readonly PackedScene _resource;
 		public LaserSword()
 		{
 			Speed = 10;
 			SceneFilePath = "res://Weapons/LaserSword/LaserSword.tscn";
+			_resource = ResourceLoader.Load<PackedScene>(SceneFilePath);
 			BodyEntered += LaserSword_BodyEntered;
 		}
 
@@ -22,8 +22,7 @@ namespace Survival2D.Weapons.LaserSword
 
 		public void Shot(Vector2 startPosition, Vector2 vectorAttack, Node spawn)
 		{
-			var resource = ResourceLoader.Load<PackedScene>(SceneFilePath);
-			var instance = resource.Instantiate();
+			var instance = _resource.Instantiate();
 			var node = instance as LaserSword;
 			node.Damage = Damage;
 			node.Position = startPosition;
@@ -33,11 +32,9 @@ namespace Survival2D.Weapons.LaserSword
 
 		public override void _Ready()
 		{
-
-			Task.Run(async() => {
-				await Task.Delay(10000);
-				QueueFree();
-			});
+			var timer = new Timer { Autostart = true,WaitTime = 10 };
+			timer.Timeout += () => { QueueFree(); };
+			AddChild(timer);
 			base._Ready();
 		}
 		public override void _Process(double delta)
@@ -57,7 +54,9 @@ namespace Survival2D.Weapons.LaserSword
 				character.GiveDamage(Damage);
 				GD.Print(body.Name);
 				GD.Print("HP: "+character.HP);
-				QueueFree();
+				Damage/=2;
+				if(Damage < 1)
+					QueueFree();
 			}
 		}
 	}

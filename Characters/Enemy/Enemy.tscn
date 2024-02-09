@@ -9,9 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://dbxinu8bl1vl4" path="res://Characters/Enemy/Animation/YodaDeathAnimation5.png" id="7_m8uxr"]
 [ext_resource type="Texture2D" uid="uid://c8e38hpqv8b3u" path="res://Characters/Enemy/Animation/YodaDeathAnimation6.png" id="8_dppnp"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f58j2"]
-radius = 97.0
-height = 322.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_oevlj"]
+radius = 113.462
+height = 340.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_cjhbd"]
 animations = [{
@@ -42,12 +42,13 @@ animations = [{
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_j2rkc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_f58j2")
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("1_ke2bu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.519999, 0.4)
+shape = SubResource("CapsuleShape2D_oevlj")
 
 [node name="YodaAnimation" type="AnimatedSprite2D" parent="."]
 visible = false

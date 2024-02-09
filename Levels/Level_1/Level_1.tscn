@@ -1,10 +1,10 @@
 [gd_scene load_steps=8 format=3 uid="uid://d0j0pd3b3xio0"]
 
-[ext_resource type="PackedScene" uid="uid://l710gty7ic36" path="res://Characters/MainCharacter/MainCharacter.tscn" id="1_0b8pj"]
-[ext_resource type="Script" path="res://Levels/Level_1.cs" id="1_3q2ns"]
-[ext_resource type="Texture2D" uid="uid://hiyskiyt015s" path="res://Levels/Level_1_Ground.png" id="1_016wm"]
-[ext_resource type="PackedScene" uid="uid://cgoye6mdexoyt" path="res://Characters/Enemy/Enemy.tscn" id="3_a7awh"]
-[ext_resource type="PackedScene" uid="uid://bp7owujgiei5g" path="res://Spawns/EnemySpawn/EnemySpawn.tscn" id="6_o85th"]
+[ext_resource type="Script" path="res://Levels/Level_1/Level_1.cs" id="1_1lxre"]
+[ext_resource type="Texture2D" uid="uid://hiyskiyt015s" path="res://Levels/Level_1/Level_1_Ground.png" id="2_ebtjv"]
+[ext_resource type="PackedScene" uid="uid://l710gty7ic36" path="res://Characters/MainCharacter/MainCharacter.tscn" id="3_enhp5"]
+[ext_resource type="PackedScene" uid="uid://cgoye6mdexoyt" path="res://Characters/Enemy/Enemy.tscn" id="4_oexis"]
+[ext_resource type="PackedScene" uid="uid://bp7owujgiei5g" path="res://Spawns/EnemySpawn/EnemySpawn.tscn" id="5_g3054"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gwv23"]
 size = Vector2(1120, 10)
@@ -12,13 +12,14 @@ size = Vector2(1120, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7h3j8"]
 size = Vector2(10, 1120)
 
-[node name="Level_1" type="Node2D"]
+[node name="Level" type="Node2D"]
 position = Vector2(0, 4)
-script = ExtResource("1_3q2ns")
+script = ExtResource("1_1lxre")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(10, 10)
-texture = ExtResource("1_016wm")
+position = Vector2(-7, 0)
+scale = Vector2(20, 20)
+texture = ExtResource("2_ebtjv")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D"]
 position = Vector2(0, 370)
@@ -52,17 +53,27 @@ scale = Vector2(0.666667, 0.666667)
 position = Vector2(-1110, -4.5)
 shape = SubResource("RectangleShape2D_7h3j8")
 
-[node name="MainCharacter" parent="." instance=ExtResource("1_0b8pj")]
-position = Vector2(-10, -5)
+[node name="MainCharacter" parent="." instance=ExtResource("3_enhp5")]
+position = Vector2(-307, -69)
 
 [node name="Camera2D" type="Camera2D" parent="MainCharacter"]
-zoom = Vector2(0.2, 0.2)
+position = Vector2(3, 0)
+zoom = Vector2(0.15, 0.15)
 
-[node name="Enemy" parent="." instance=ExtResource("3_a7awh")]
-position = Vector2(404, -681)
+[node name="Enemy" parent="." instance=ExtResource("4_oexis")]
+position = Vector2(-283, -2333)
 
-[node name="Enemy2" parent="." instance=ExtResource("3_a7awh")]
-position = Vector2(697, -436)
+[node name="Enemy2" parent="." instance=ExtResource("4_oexis")]
+position = Vector2(1676, 1342)
 
-[node name="EnemySpawn" parent="." instance=ExtResource("6_o85th")]
-position = Vector2(-3179, -3212)
+[node name="EnemySpawn" parent="." instance=ExtResource("5_g3054")]
+position = Vector2(-2829, -2799)
+
+[node name="EnemySpawn2" parent="." instance=ExtResource("5_g3054")]
+position = Vector2(2970, -2799)
+
+[node name="EnemySpawn3" parent="." instance=ExtResource("5_g3054")]
+position = Vector2(2970, 2997)
+
+[node name="EnemySpawn4" parent="." instance=ExtResource("5_g3054")]
+position = Vector2(-2829, 2997)

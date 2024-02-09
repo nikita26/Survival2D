@@ -1,8 +1,7 @@
-﻿using Godot;
-
-namespace Survival2D.Abstractions
+﻿namespace Survival2D.Abstractions
 {
     internal interface ILevel
     {
+        void StopGame();
     }
 }
